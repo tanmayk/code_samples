@@ -1,0 +1,5 @@
+name = WP Migrate Extend
+description = Provides extra processing for WP migration.
+core = 7.x
+version = 7.x-1.5
+project = wp_migrate_extend

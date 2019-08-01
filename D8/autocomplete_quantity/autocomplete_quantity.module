@@ -1,0 +1,21 @@
+<?php
+
+/**
+ * @file
+ * Main module file for Autocomplete Quantity.
+ */
+
+use Drupal\node\NodeInterface;
+use Drupal\Core\Session\AccountInterface;
+
+/**
+ * Implements hook_node_access().
+ */
+function autocomplete_quantity_node_access(NodeInterface $node, $op, AccountInterface $account) {
+  // Collection node can only be viewed by owner.
+  if ($node->bundle() == 'collection' && $op == 'view' && $node->getOwnerId() != $account->id()) {
+    return AccessResult::forbidden();
+  }
+  // Use default permissions for other conditions.
+  return AccessResult::neutral();
+}

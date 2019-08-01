@@ -1,0 +1,10 @@
+views.style.scroller:
+  type: views_style
+  label: 'Scroller'
+  mapping:
+    height:
+      type: integer
+      label: 'Height'
+    opacity:
+      type: float
+      label: 'Opacity'

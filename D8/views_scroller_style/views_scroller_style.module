@@ -1,0 +1,20 @@
+<?php
+
+/**
+ * @file
+ * Views Scroller Style.
+ */
+
+// Store preprocess theme functions in a separate .inc file.
+\Drupal::moduleHandler()->loadInclude('views_scroller_style', 'inc', 'views_scroller_style.theme');
+
+/**
+ * Implements hook_theme().
+ */
+function views_scroller_style_theme($existing, $type, $theme, $path) {
+  return [
+    'scroller' => [
+      'file' => 'views_scroller_style.theme.inc',
+    ],
+  ];
+}

@@ -1,0 +1,32 @@
+{#
+/**
+ * Default theme implementation for Views to output a scroller style.
+ *
+ * Available variables:
+ * - items: Items for scroller.
+ *   - title: Title of scroller item.
+ *   - body: Description of scroller item.
+ *
+ * @see template_preprocess_views_view_scroller()
+ *
+ * @ingroup themeable
+ */
+#}
+{{ attach_library('views_scroller_style/scroller') }}
+<div class="content-scroller">
+  {% for item in items %}
+    <section id="scroller-{{ item.nid }}">
+      <header>
+      <div class="scroller-color"></div>
+      <div class="scroller-content-wrapper">
+          <h1><strong>{{ item.title }}</strong></h1>
+        </div>
+      </header>
+      <article>
+        <div class="container">
+          {{ item.body }}
+        <div>
+      </article>
+    </section>
+  {% endfor %}
+</div>

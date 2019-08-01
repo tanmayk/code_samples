@@ -1,0 +1,7 @@
+name = Geo Redirect
+description = Allow Country-wise redirects.
+core = 7.x
+
+configure = admin/config/search/geo-redirect
+
+files[] = includes/geo_redirect.inc

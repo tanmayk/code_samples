@@ -1,0 +1,109 @@
+<?php
+
+/**
+ * @file
+ * Provides extra processing for WP migration.
+ */
+
+/**
+ * Implements hook_migrate_api().
+ */
+function wp_migrate_extend_migrate_api() {
+  $api = array(
+    'api' => 2,
+  );
+  return $api;
+}
+
+/**
+ * Extend WP Blog post migration class.
+ */
+class WpMigrateExtendBlog extends WordPressBlog {
+
+  /**
+   * {@inheritdoc}
+   */
+  public function migrationClasses() {
+    $classes = parent::migrationClasses();
+    // Add our custom class.
+    $classes['WordPressBlogEntry'] = 'WpMigrateExtendBlogEntry';
+    return $classes;
+  }
+
+}
+
+/**
+ * Extend WP Blog post migration class.
+ */
+class WpMigrateExtendBlogEntry extends WordPressBlogEntry {
+
+  /**
+   * {@inheritdoc}
+   */
+  public function __construct(array $arguments = array()) {
+    parent::__construct($arguments);
+    // Initiate the source again, so our fields get added.
+    $this->source = new WpMigrateExtendItemSource($this->wxrFile, $this->postType, $this->machineName, $this->arguments['namespaces']);
+    $this->addFieldMapping('field_image', 'image_url');
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function prepareRow($row) {
+    parent::prepareRow($row);
+
+    $content = $row->content;
+    // Reg ex pattern to find img tags from html.
+    $pattern = wp_migrate_extend_get_img_regex_pattern();
+    $matches = array();
+    preg_match_all($pattern, $content, $matches);
+
+    if (!empty($matches[2][0])) {
+      // Add it to image url.
+      $row->image_url = $matches[2][0];
+    }
+
+    if (!empty($matches[0][0])) {
+      // Remove it from content.
+      $content = str_replace($matches[0][0], '', $content);
+    }
+    // Replace the content.
+    $row->content = $content;
+
+  }
+
+}
+
+/**
+ * Extend WordPressItemSource to add required fields.
+ */
+class WpMigrateExtendItemSource extends WordPressItemSource {
+
+  /**
+   * {@inheritdoc}
+   */
+  public function __construct($filename, $post_type, $cache_key, $namespaces = array()) {
+    // Execute parent's contructor.
+    parent::__construct($filename, $post_type, $cache_key, $namespaces);
+    // Override the fields from our method.
+    $this->fields = $this->fields();
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function fields() {
+    $fields = parent::fields();
+    $fields['image_url'] = 'Image extracted from body.';
+    return $fields;
+  }
+
+}
+
+/**
+ * Return regex pattern to find img tag.
+ */
+function wp_migrate_extend_get_img_regex_pattern() {
+  return '/<img\s*(?:class\s*\=\s*[\'\"](.*?)[\'\"].*?\s*|src\s*\=\s*[\'\"](.*?)[\'\"].*?\s*|alt\s*\=\s*[\'\"](.*?)[\'\"].*?\s*|width\s*\=\s*[\'\"](.*?)[\'\"].*?\s*|height\s*\=\s*[\'\"](.*?)[\'\"].*?\s*)+.*?>/si';
+}

@@ -1,0 +1,8 @@
+name: 'Views Scroller Style'
+description: 'Provides custom views style plugin.'
+type: module
+core: 8.x
+dependencies:
+  - system
+  - views
+version: 8.x-1.0

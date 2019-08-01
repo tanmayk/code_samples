@@ -1,0 +1,8 @@
+scroller:
+  version: 1.x
+  js:
+    js/scroller.js: {}
+  dependencies:
+    - core/jquery
+    - core/drupal
+    - core/drupalSettings

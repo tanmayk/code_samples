@@ -1,0 +1,20 @@
+<?php
+
+/**
+ * @file
+ * Installation functions for WP Migrate Extend module.
+ */
+
+/**
+ * Implements hook_install().
+ */
+function wp_migrate_extend_install() {
+  variable_set('wordpress_migrate_blog_class', 'WpMigrateExtendBlog');
+}
+
+/**
+ * Implements hook_uninstall().
+ */
+function wp_migrate_extend_uninstall() {
+  variable_del('wordpress_migrate_blog_class');
+}
