@@ -1,6 +1,0 @@
-name: 'Autocomplete Quantity'
-type: module
-core: 8.x
-description: 'Extends autocomplete entity reference with quantity field.'
-dependencies:
-  - field
