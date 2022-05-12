@@ -1,0 +1,132 @@
+<?php
+
+/**
+ * @file
+ * API Jobs module.
+ */
+
+/**
+ * Node ids & block ids used to find exact node & block.
+ *
+ * Having hardcoded constants for node id & block id is not a good idea, but
+ * this is what client needs.
+ */
+define('API_JOBS_SEARCH_PAGE_USA_NID', '');
+define('API_JOBS_SEARCH_PAGE_CRP_NID', '');
+define('API_JOBS_SEARCH_PAGE_MDC_NID', '');
+define('API_JOBS_NOT_FOUND_USA_ID', '');
+define('API_JOBS_NOT_FOUND_CRP_ID', '');
+define('API_JOBS_NOT_FOUND_MDC_ID', '');
+
+/**
+ * Implements hook_theme().
+ */
+function api_jobs_theme($existing, $type, $theme, $path) {
+  return [
+    'api_job' => [
+      'variables' => [
+        'job_id' => NULL,
+        'job_number' => NULL,
+        'job_type' => NULL,
+        'title' => NULL,
+        'apply_link' => NULL,
+        'type' => NULL,
+        'description' => NULL,
+        'employee_type' => NULL,
+        'location' => NULL,
+        'date_posted' => NULL,
+        'similar_jobs' => [],
+      ],
+    ],
+  ];
+}
+
+/**
+ * Implements hook_mail().
+ */
+function api_jobs_mail($key, &$message, $params) {
+  $message['from'] = $params['from'];
+  $message['reply-to'] = $params['from'];
+  $message['sender'] = $params['from'];
+  // Set these as headers too.
+  $message['headers']['From'] = $params['from'];
+  $message['headers']['Reply-to'] = $params['from'];
+  $message['headers']['Sender'] = $params['from'];
+  $message['subject'] = $params['subject'];
+  $message['body'][] = $params['message'];
+}
+
+/**
+ * Implements hook_page_attachments_alter().
+ */
+function api_jobs_page_attachments_alter(array &$attachments) {
+  // Add google structured schema data for job posting.
+  $route_match = \Drupal::routeMatch();
+  $route_name = $route_match->getRouteName();
+  if ($route_name == 'api_jobs.job') {
+    $query = \Drupal::request()->query->all();
+    $display_job_id = $route_match->getParameter('job_code');
+    $job_parts = explode('_', $display_job_id);
+    if (empty($job_parts[1])) {
+      $catalogcode = !empty($query['catalogcode']) ? $query['catalogcode'] : 'USA';
+    }
+    else {
+      $catalogcode = $job_parts[1];
+    }
+    // Match the catalog code from url & job.
+    $job_id = $job_parts[0];
+
+    // Date formatter.
+    $date_formatter = \Drupal::service('date.formatter');
+    // Get job details.
+    $job_response = \Drupal::service('api_jobs.api.manager')->jobDetails($job_id, $catalogcode);
+
+    if (!empty($job_response['docs'][0]['jobId'])) {
+      $job = $job_response['docs'][0];
+      $date_posted = strtotime($job['lastPosted']);
+      $date_end = strtotime($job['lastPosted']);
+      $schema = [
+        '@context' => 'https://schema.org/',
+        '@type' => 'JobPosting',
+        'title' => $job['jobTitle'],
+        'description' => strip_tags($job['jobDescription']),
+        'identifier' => [
+          '@type' => 'PropertyValue',
+          'name' => $job['jobTitle'],
+          'value' => $job['jobId'],
+        ],
+        'employmentType' => $job['employmentType'],
+        'datePosted' => $date_formatter->format($date_posted, 'custom', 'Y-m-d'),
+        'validThrough' => $date_formatter->format($date_end, 'custom', 'Y-m-d'),
+        'hiringOrganization' => [
+          '@type' => 'Organization',
+          'name' => 'confidential',
+        ],
+        'jobLocation' => [
+          '@type' => 'Place',
+          'address' => [
+            '@type' => 'PostalAddress',
+            'addressLocality' => $job['city'],
+            'addressRegion' => $job['state'],
+            'postalCode' => $job['zipCode'],
+            'addressCountry' => $job['country'],
+          ],
+        ],
+      ];
+      if ($job['remote']) {
+        $schema['jobLocationType'] = 'TELECOMMUTE';
+      }
+      $json_schema = json_encode($schema);
+
+      // Prepare script element.
+      $element = [
+        '#tag' => 'script',
+        '#attributes' => ['type' => 'application/ld+json'],
+        '#value' => $json_schema,
+        '#weight' => 100,
+      ];
+      // Add script into html head.
+      $attachments['#attached']['html_head'][] = [$element, 'api_jobs_posting_' . $job['jobId']];
+    }
+  }
+}

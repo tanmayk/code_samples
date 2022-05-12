@@ -1,0 +1,4 @@
+services:
+  api_jobs.api.manager:
+    class: Drupal\api_jobs\JobsApiManager
+    arguments: ['@request_stack', '@http_client', '@serialization.json', '@config.factory', '@logger.factory', '@language_manager', '@plugin.manager.mail']

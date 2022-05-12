@@ -1,0 +1,48 @@
+<div class="job-title-wrapper bg-white p-4 mb-4 ab-nav-border-l">
+  <div class="row">
+    <div class="col-md-8 col-sm-12">
+      <h1 class="job-title">{{ title }}</h1>
+    </div>
+    <div class="col-md-4 col-sm-12">
+      {% if apply_link %}
+        <div class="text-center job-apply-btn">
+          <p><a class="apply-btn" href="{{ apply_link }}" target="_blank">{{ 'Apply'|t }}</a></p>
+        </div>
+      {% endif %}
+    </div>
+  </div>
+</div>
+<div class="job-info-wrapper">
+  <div class="row">
+    <div class="col-md-8 col-sm-12">
+      <div class="job-desc-wrapper bg-white p-4 mb-4 ab-nav-border-l">
+        <p><strong>{{ 'Job#:'|t }} {{ job_number }}</strong></p>
+        <p><strong>{{ 'Location:'|t }}</strong> {{ type }}</p>
+        <p><strong>{{ 'Job Description:'|t }}</strong></p>
+        {{ description|raw }}
+      </div>
+    </div>
+    <div class="col-md-4 col-sm-12">
+      <div class="job-sidebar">
+        <div class="job-snapshot-wrapper bg-white p-4 mb-4 ab-nav-border-l">
+          <p><strong>{{ 'Employee Type:'|t }}</strong><br />{{ employee_type }}</p>
+          <p><strong>{{ 'Location:'|t }}</strong><br />{{ location }}</p>
+          <p><strong>{{ 'Job Type:'|t }}</strong><br />{{ job_type }}</p>
+          <p><strong>{{ 'Date Posted:'|t }}</strong><br />{{ date_posted }}</p>
+        </div>
+        <div class="job-similar-wrapper bg-white p-4 ab-nav-border-l">
+          <h3 class="title-heading-left">{{ 'Similar Jobs'|t }}</h3>
+          {% if similar_jobs is not empty %}
+            <ul class="item-list m-0 p-0">
+              {% for item in similar_jobs %}
+                <li class="list-item">{{ item }}</li>
+              {% endfor %}
+            </ul>
+          {% else %}
+            {{ 'No jobs found.'|t }}
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

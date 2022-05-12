@@ -1,0 +1,6 @@
+name: 'API Jobs'
+type: module
+description: 'Job search functionality.'
+core_version_requirement: ^8.8 || ^9
+version: '1.0.0'
+configure: api_jobs.config

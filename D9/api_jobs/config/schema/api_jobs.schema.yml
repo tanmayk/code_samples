@@ -1,0 +1,7 @@
+block.settings.search_listing:
+  type: block_settings
+  label: 'Job listing block configuration'
+  mapping:
+    catalogcode:
+      type: text
+      label: 'Catalog Code'

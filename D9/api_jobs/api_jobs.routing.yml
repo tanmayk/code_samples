@@ -1,0 +1,16 @@
+api_jobs.config:
+  path: '/admin/config/api-job/jobs'
+  defaults:
+    _form: '\Drupal\api_jobs\Form\ApiJobsSettingsForm'
+    _title: 'Jobs Configuration'
+  requirements:
+    _permission: 'administer site configuration'
+
+api_jobs.job:
+  path: '/job/{job_code}/{title}'
+  defaults:
+    _controller: '\Drupal\api_jobs\Controller\ApiJobController::buildJob'
+    _title_callback: '\Drupal\api_jobs\Controller\ApiJobController::buildJobTitle'
+    title: ''
+  requirements:
+    _permission: 'access content'
