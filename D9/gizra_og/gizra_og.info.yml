@@ -1,0 +1,7 @@
+name: "Gizra OG"
+type: module
+description: "Provides a formatter to show greeting to non group members."
+core_version_requirement: ^8 || ^9
+package: "gizra"
+dependencies:
+  - og

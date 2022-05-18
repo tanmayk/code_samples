@@ -1,0 +1,21 @@
+<?php
+
+/**
+ * @file
+ * Gizra OG customizations.
+ */
+
+ /**
+  * Implements hook_theme().
+  */
+ function gizra_og_theme($existing, $type, $theme, $path) {
+   return [
+     'gizra_og_greeting' => [
+       'variables' => [
+         'name' => NULL,
+         'url' => NULL,
+         'group_label' => NULL,
+       ],
+     ],
+   ];
+ }
