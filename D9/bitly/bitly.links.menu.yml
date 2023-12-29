@@ -1,0 +1,6 @@
+bitly.admin_config_form:
+  title: 'bit.ly'
+  description: 'Configure bit.ly.'
+  route_name: bitly.admin_config_form
+  parent: system.admin_config_search
+  weight: -1

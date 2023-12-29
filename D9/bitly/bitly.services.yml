@@ -1,0 +1,4 @@
+services:
+  bitly.api:
+    class: Drupal\bitly\BitlyApi
+    arguments: ['@config.factory', '@http_client', '@logger.factory']

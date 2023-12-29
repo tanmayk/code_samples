@@ -1,0 +1,7 @@
+bitly.admin_config_form:
+  path: '/admin/config/search/bitly'
+  defaults:
+    _form: '\Drupal\bitly\Form\BitlyConfigForm'
+    _title: 'bit.ly'
+  requirements:
+    _permission: 'administer site configuration'

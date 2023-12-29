@@ -1,0 +1,7 @@
+name: 'bit.ly'
+description: 'Provides API access to bit.ly to other modules.'
+package: bit.ly
+type: module
+core_version_requirement: ^8 || ^9
+version: 9.x-1.0
+configure: bitly.admin_config_form
