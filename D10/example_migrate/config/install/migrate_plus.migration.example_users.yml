@@ -1,0 +1,55 @@
+id: example_users
+label: Users
+migration_group: example
+migration_tags:
+  - example
+  - Drupal 6
+  - User
+dependencies: { }
+source:
+  plugin: example_users
+process:
+  uid: uid
+  name: name
+  pass: pass
+  mail: mail
+  created: created
+  access: access
+  login: login
+  status: status
+  timezone:
+    plugin: user_update_7002
+    source: timezone
+  langcode:
+    plugin: user_langcode
+    source: language
+    fallback_to_site_default: false
+  preferred_langcode:
+    plugin: user_langcode
+    source: language
+    fallback_to_site_default: true
+  preferred_admin_langcode:
+    plugin: user_langcode
+    source: language
+    fallback_to_site_default: true
+  init: init
+  roles:
+    -
+      plugin: explode
+      delimiter: ,
+      source: roles
+      strict: false
+    -
+      plugin: static_map
+      bypass: true
+      map:
+        3: administrator
+        4: web_page_editor
+        5: nas_editor
+        6: citation_editor
+        7: citation_approver
+        8: it_editor
+        9: citation_assistant
+destination:
+  plugin: entity:user
+  md5_passwords: true

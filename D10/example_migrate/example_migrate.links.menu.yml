@@ -1,0 +1,6 @@
+example_migrate.config:
+  title: 'Example Migrate'
+  route_name: example_migrate.config
+  parent: system.admin_config
+  description: 'Configure Example Migrate.'
+  weight: 10

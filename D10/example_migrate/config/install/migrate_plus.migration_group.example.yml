@@ -1,0 +1,6 @@
+id: example
+label: Example
+description: 'Migrations required for Example.'
+source_type: 'Drupal 6'
+module: null
+shared_configuration: null

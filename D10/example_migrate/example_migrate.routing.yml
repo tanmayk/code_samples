@@ -1,0 +1,7 @@
+example_migrate.config:
+  path: '/admin/config/example-migrate'
+  defaults:
+    _title: 'Migration'
+    _form: '\Drupal\example_migrate\Form\ExampleMigrateConfigForm'
+  requirements:
+    _permission: 'administer site configuration'

@@ -1,0 +1,59 @@
+id: example_galleries
+label: Galleries
+migration_group: example
+migration_tags:
+  - Examples
+  - Drupal 6
+  - Content
+source:
+  plugin: example_galleries
+process:
+  nid: tnid
+  vid: vid
+  type: type
+  langcode:
+    plugin: default_value
+    source: language
+    default_value: "und"
+  title: title
+  uid: node_uid
+  status: status
+  created: created
+  changed: changed
+  promote: promote
+  sticky: sticky
+  'body/value':
+    plugin: example_inline_images
+    source: field_body_value
+  'body/format':
+    plugin: static_map
+    source: field_body_format
+    map:
+      1: basic_html
+      2: full_html
+      3: plain_text
+    default_value: 'plain_text'
+  revision_uid: revision_uid
+  revision_log: log
+  revision_timestamp: timestamp
+  field_images:
+    plugin: sub_process
+    source: files
+    process:
+      target_id:
+        plugin: file_import
+        source: filepath
+        id_only: true
+      display: list
+      description: description
+      title: description
+      alt: description
+  'path/pathauto':
+    plugin: default_value
+    default_value: 1
+destination:
+  plugin: entity:node
+  default_bundle: gallery
+migration_dependencies:
+  required:
+    - example_users
