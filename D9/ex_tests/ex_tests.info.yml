@@ -1,0 +1,11 @@
+name: 'Ex Tests'
+description: 'Testing for Example platform.'
+package: Example
+type: module
+core_version_requirement: ^8 || ^9
+version: 8.x-1.0
+dependencies:
+  - ex_ftp
+  - ex_profile
+  - ex_user
+  - ex_web_profile

@@ -1,0 +1,7 @@
+services:
+  ex_tests.entity_manager:
+    class: Drupal\ex_tests\Testing\EntityCreateManager
+    arguments: ['@entity_type.manager', '@router.builder']
+  ex_tests.instructions_manager:
+    class: Drupal\ex_tests\Testing\ExProfileInstructionsProvider
+    arguments: ['@ex_profile.helper']
